@@ -116,10 +116,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void startOrStop(Integer status, Long id) {
         // builder()注解构建器，构建器对象.status，不同编程风格
         Employee employee = Employee.builder().
-                            status(status).id(id).build();
+                            status(status).id(id).updateTime(LocalDateTime.now()).updateUser(BaseContext.getCurrentId()).build();
         employeeMapper.update(employee);
     }
 
+    /**
+     * 根据ID查询
+     * @param id
+     * @return
+     */
     @Override
     public EmployeeVO getById(Long id) {
         EmployeeVO employeeVO = new EmployeeVO();
@@ -127,6 +132,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeVO;
     }
 
+    /**
+     * 更新员工信息
+     * @param employeeDTO
+     */
     @Override
     public void update(EmployeeDTO employeeDTO) {
         // 1.DTO类型转化为实体
