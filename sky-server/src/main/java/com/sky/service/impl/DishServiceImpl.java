@@ -138,15 +138,48 @@ public class DishServiceImpl implements DishService {
         dishFlavorMapper.insertBatch(flavors);
     }
 
+    /**
+     * 菜品起售/停售状态设置
+     * @param status
+     * @param id
+     */
     @Override
     public void startOrStop(Integer status, Long id) {
         Dish dish = Dish.builder().status(status).id(id).build();
         dishMapper.update(dish);
     }
 
+    /**
+     * 根据分类ID查询菜品信息
+     * @param cateId
+     * @return
+     */
     @Override
     public List<Dish> getByCateId(Long cateId) {
         List<Dish> dishes = dishMapper.getByCateId(cateId);
         return dishes;
+    }
+
+    /**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> dishList = dishMapper.list(dish);
+
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = dishFlavorMapper.getByDishId(d.getId());
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
+        }
+        return dishVOList;
     }
 }

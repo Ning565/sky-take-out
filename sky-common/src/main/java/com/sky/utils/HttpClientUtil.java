@@ -1,6 +1,7 @@
 package com.sky.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -39,7 +40,7 @@ public class HttpClientUtil {
 
         String result = "";
         CloseableHttpResponse response = null;
-
+        // 为GET方式请求拼接可能的map参数
         try{
             URIBuilder builder = new URIBuilder(url);
             if(paramMap != null){
@@ -56,7 +57,7 @@ public class HttpClientUtil {
             response = httpClient.execute(httpGet);
 
             //判断响应状态
-            if(response.getStatusLine().getStatusCode() == 200){
+            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
                 result = EntityUtils.toString(response.getEntity(),"UTF-8");
             }
         }catch (Exception e){
