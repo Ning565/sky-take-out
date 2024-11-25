@@ -6,12 +6,18 @@ spring:
     active: dev
   main:
     allow-circular-references: true
+    # allow-bean-definition-overriding: true
   datasource:
     druid:
       driver-class-name: ${sky.datasource.driver-class-name}
       url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    database: ${sky.redis.database} # 默认使用0号数据库
+    # 没有密码，不配置 password
 
 mybatis:
   #mapper配置文件
