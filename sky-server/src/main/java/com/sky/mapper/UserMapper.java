@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Map;
+
 @Mapper
 public interface UserMapper {
     /**
@@ -28,4 +30,6 @@ public interface UserMapper {
     void insert(User user);
     @Select("select * from sky_take_out.user where id = #{userId}")
     User getById(Long userId);
+
+    Integer countByMap(Map map);
 }

@@ -15,6 +15,18 @@
         where id = #{id};
     </update>
 
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from sky_take_out.setmeal
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+
     <delete id="deleteByIds">
         delete from sky_take_out.setmeal where id in
         <foreach collection="setmealIds" item="id" separator="," open="(" close=")">

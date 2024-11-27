@@ -15,6 +15,18 @@
         where id = #{id}
     </update>
 
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from sky_take_out.dish
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+
     <delete id="deleteByIds">
 #         delete from dish where id in (???)
     delete from sky_take_out.dish where id in
