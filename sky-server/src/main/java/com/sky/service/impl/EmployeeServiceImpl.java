@@ -21,6 +21,8 @@ import com.sky.vo.EmployeeVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -32,7 +34,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;
-
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * 员工登录
      *
@@ -125,6 +128,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public EmployeeVO getById(Long id) {
+
         EmployeeVO employeeVO = new EmployeeVO();
         BeanUtils.copyProperties( employeeMapper.getById(id),employeeVO);
         return employeeVO;

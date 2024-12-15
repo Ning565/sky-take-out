@@ -2,6 +2,7 @@ package com.sky.controller.admin;
 
 
 import com.sky.config.RedisConfiguration;
+import com.sky.constant.CacheConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
@@ -21,7 +22,7 @@ public class ShopController {
         @Autowired
         private RedisTemplate redisTemplate;
         // 常量表示
-        public static final String KEY = "SHOP_STATUS";
+
 
         @PutMapping("/{status}")
         @ApiOperation("设置商店营业状态")
@@ -29,7 +30,7 @@ public class ShopController {
             log.info("设置商店营业状态:{}",status == 1 ? "营业中" : "已打烊");
             // 利用Redis设置
             ValueOperations springValueOperations = redisTemplate.opsForValue();
-            springValueOperations.set(KEY, status);
+            springValueOperations.set(CacheConstant.SHOP_STATUS, status);
             return Result.success();
         }
         @GetMapping("/status")
@@ -37,7 +38,7 @@ public class ShopController {
         public Result<Integer> getStatus(){
             // 为实例变量，不能在类中书写（成员变量，没有初始化），必须在方法中
             ValueOperations springValueOperations = redisTemplate.opsForValue();
-            Integer status = (Integer) springValueOperations.get(KEY);
+            Integer status = (Integer) springValueOperations.get(CacheConstant.SHOP_STATUS);
             log.info("获取到店铺的营业状态为：{}",status == 1 ? "营业中" : "已打烊");
             return Result.success(status);
         }

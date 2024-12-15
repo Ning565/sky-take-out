@@ -58,11 +58,11 @@
             <version>8.0.32</version> <!-- 或最新版本 -->
             <scope>runtime</scope> <!-- 运行时依赖 -->
         </dependency>
-
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-        </dependency>
+<!--由于引入了mp依赖，删掉当前依赖-->
+<!--        <dependency>-->
+<!--            <groupId>org.mybatis.spring.boot</groupId>-->
+<!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -160,8 +160,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
-
-
+    <!-- 新增mybatis-plus依赖-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.3.1</version> <!-- 使用最新版本 -->
+        </dependency>
+<!--        在分页的时候使用，确保与mp兼容-->
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+            <version>4.5</version> <!-- 确保是兼容的版本 -->
+        </dependency>
 
     </dependencies>
 

@@ -45,7 +45,7 @@
         order by d.create_time desc
     </select>
 
-    <select id="list" resultType="Dish" parameterType="Dish">
+    <select id="list" resultType="com.sky.entity.Dish" parameterType="com.sky.entity.Dish">
         select * from sky_take_out.dish
         <where>
             <if test="name != null">

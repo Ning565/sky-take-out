@@ -1,5 +1,6 @@
 package com.sky.controller.user;
 
+import com.sky.constant.CacheConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.entity.Dish;
 import com.sky.result.Result;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static com.sky.constant.CacheConstant.CACHE_DISH_TTL;
 
 @RestController("userDishController")
 @RequestMapping("/user/dish")
@@ -47,8 +51,8 @@ public class DishController {
         dish.setStatus(StatusConstant.ENABLE); //查询起售中的菜品
 
         list = dishService.listWithFlavor(dish);
-        // 将查询结果存储
-        redisTemplate.opsForValue().set(key,list);
+        // 将查询结果存储，设置有效期
+        redisTemplate.opsForValue().set(key,list,CACHE_DISH_TTL, TimeUnit.MINUTES);
         return Result.success(list);
     }
 
