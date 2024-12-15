@@ -18,6 +18,7 @@ import com.sky.mapper.VoucherSeckillMapper;
 import com.sky.result.PageResult;
 import com.sky.service.IVoucherSeckillService;
 import com.sky.service.IVoucherService;
+import com.sky.utils.CacheClient;
 import com.sky.vo.VoucherVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> implements IVoucherService {
+    private static final Long CACHE_SHOP_TTL = 2L;
     // 调用IVoucherSeckillService，专门处理VoucherSeckill类型的，SeckillService的不要实现类，因为没有什么业务逻辑需要实现
     //    @Autowired
     //    IVoucherSeckillService voucherSeckillService;
@@ -40,6 +43,9 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
     VoucherMapper voucherMapper;
     @Autowired
     VoucherSeckillMapper voucherSeckillMapper;
+
+    @Autowired
+    private CacheClient cacheClient;
     @Override
     @Transactional
     public Long saveSeckill(VoucherDTO voucherDTO) {
@@ -109,5 +115,18 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
         Page<VoucherVO> page = new Page<>();
         BeanUtils.copyProperties(pageVoucher,page);
         return new PageResult(page.getTotal(),page.getRecords());
+    }
+
+    /**
+     * 用户端实现Redis 按照ID缓存查询优惠券信息
+     * @return
+     */
+    @Override
+    public VoucherVO queryByID(Long id) throws InterruptedException {
+        Voucher voucher = cacheClient.queryById("cache:voucher", id, Voucher.class, this::getById, CACHE_SHOP_TTL, TimeUnit.MINUTES);
+        if (voucher == null) return null;
+        VoucherVO voucherVO = new VoucherVO();
+        BeanUtils.copyProperties(voucher,voucherVO);
+        return voucherVO;
     }
 }
