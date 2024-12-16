@@ -25,9 +25,6 @@ if (stock == false or tonumber(stock) <= 0) then
     return 1
 end
 -- 3.2 一人一单：根据订单key判断用户是否下过单
--- 判断一个元素是否存在于指定的集合
-redis.call('set', 'debug:userId', 'userId:  ' .. userId)
-redis.call('set', 'debug:orderId', 'orderId的value:  ' .. userId)
 if (redis.call('sismember', orderKey, userId) == 1) then
     -- 3.3 存在下过单，说明是重复下单，返回2
     return 2
@@ -38,5 +35,5 @@ redis.call('incrby', stockKey, -1)
 -- 4.2 下单（保存用户：订单key - 用户ID)
 redis.call('sadd', orderKey, userId);
 -- 4.3 发送到消息队列  XADD stream.orders * k1 v1 k2 v2 k3 v3 ...
-redis.call('xadd', 'stream.orders', '*', 'userId', userId, 'voucherId', voucherId, 'id', orderId)
+--redis.call('xadd', 'stream.orders', '*', 'userId', userId, 'voucherId', voucherId, 'id', orderId)
 return 0;

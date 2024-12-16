@@ -22,7 +22,14 @@ spring:
     mapper-locations: ${sky.mybatis-plus.mapper-locations} # 如果使用 XML 映射文件
     configuration:
       log-impl: ${sky.mybatis-plus.configuration.log-impl} # 开启 SQL 日志
-
+  rabbitmq:
+    host: ${sky.rabbitmq.host}
+    port: ${sky.rabbitmq.port}
+    username: ${sky.rabbitmq.username}
+    password: ${sky.rabbitmq.password}
+    listener:
+      simple:
+        acknowledge-mode: ${sky.rabbitmq.listener.simple.acknowledge-mode}
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml

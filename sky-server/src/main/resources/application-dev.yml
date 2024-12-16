@@ -22,3 +22,11 @@ sky:
     mapper-locations: classpath:/mapper/*.xml # 如果使用 XML 映射文件
     configuration:
       log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启 SQL 日志
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: manual
