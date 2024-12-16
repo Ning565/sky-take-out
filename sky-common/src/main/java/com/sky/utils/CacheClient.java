@@ -208,18 +208,18 @@ public class CacheClient {
      * 第一次查询的都会是返回null，需要把数据提前缓存进redis ：获取锁的主线程等待一下，查到结果再返回
      * TODO 小缺陷 大家会同时抢夺锁，返回null
      * 如果是主线程，在分线程完成查询任务后，重新构建数据并返回，解决第一次返回为null的问题
+     *
      * @param keyPrefix
      * @param id
      * @param type
      * @param dataBaseCall
      * @param time
      * @param timeUnit
-     * @return
      * @param <R>
      * @param <ID>
+     * @return
      */
-    public <R, ID> R queryById(
-            String keyPrefix, ID id, Class<R> type, Function<ID, R> dataBaseCall, Long time, TimeUnit timeUnit) throws InterruptedException {
+    public <R, ID> R queryById(String keyPrefix, ID id, Class<R> type, Function<ID, R> dataBaseCall, Long time, TimeUnit timeUnit) throws InterruptedException {
         String key = keyPrefix + id;
         // 1. 查询redis数据库
         String result = (String) redisTemplate.opsForValue().get(key);
@@ -245,7 +245,6 @@ public class CacheClient {
         String lockKey = LOCK_VOUCHER_KEY + id;
         boolean isLock = tryLock(lockKey);
         // 4.获取互斥锁
-
         // 4.1 获取成功开启一个新线程重建数据库，设置过期时间为逻辑过期时间，最后返回数据
         if (isLock) {
             // 成功，开启独立线程，实现缓存重建
@@ -268,12 +267,12 @@ public class CacheClient {
                     }
             );
             // 如果是主线程，在分线程完成查询任务后，重新构建数据并返回，解决第一次返回为null的问题
-            // 最多等待2秒钟返回
-            Thread.sleep(1000);
-           result = (String) redisTemplate.opsForValue().get(key);
-           redisData = JSONUtil.toBean(result, RedisData.class);
-           r = JSONUtil.toBean((JSONObject) redisData.getData(), type);
-           return r;
+            // 最多等待0.5秒钟返回
+            Thread.sleep(500);
+            result = (String) redisTemplate.opsForValue().get(key);
+            redisData = JSONUtil.toBean(result, RedisData.class);
+            r = JSONUtil.toBean((JSONObject) redisData.getData(), type);
+            return r;
         }
         // 获取失败的直接返回旧的信息
         return r;

@@ -1,7 +1,9 @@
 package com.sky.controller.user;
 
 
+import com.sky.entity.VoucherOrder;
 import com.sky.result.Result;
+import com.sky.service.IVoucherOrderService;
 import com.sky.service.IVoucherService;
 import com.sky.utils.CacheClient;
 import com.sky.vo.VoucherVO;
@@ -24,21 +26,40 @@ import java.util.List;
 public class VoucherController {
     @Autowired
     private IVoucherService voucherService;
-
+    @Autowired
+    private IVoucherOrderService voucherOrderService;
 
     /**
      * 查询优惠券
      * Redis来缓存优惠券信息，减少数据库查询操作
+     *
      * @return
      */
-    @GetMapping("/{id}")
+    @GetMapping
     @ApiOperation("查询优惠券内容")
-    public Result<VoucherVO> queryVoucher(@PathVariable  Long id) throws InterruptedException {
+    public Result<VoucherVO> queryVoucher(Long id) throws InterruptedException {
+        log.info("按照ID查询优惠券信息：{}", id);
         // 1.调用CacheClient利用Redis查询——实现防止缓存穿透和缓存击穿
         // 2.封装返回结果
         VoucherVO voucherVO = voucherService.queryByID(id);
         return Result.success(voucherVO);
     }
 
+    @GetMapping("/seckill/{id}")
+    @ApiOperation("用户购买秒杀券")
+    public Result purchaseSeckill(@PathVariable Long id) {
+        log.info("用户购买秒杀券:{}", id);
+        return voucherOrderService.purchase(id);
+    }
 
+    @GetMapping("/{id}")
+    @ApiOperation("用户购买普通券")
+    public Result purchaseVoucher(@PathVariable Long id) {
+        log.info("用户购买普通券：{}",id);
+        // 模拟userId
+        VoucherOrder voucherOrder = VoucherOrder.builder().userId(1010108L).voucherId(id).id(401089665580300694L).
+                build();
+        voucherOrderService.save(voucherOrder);
+        return Result.success();
+    }
 }

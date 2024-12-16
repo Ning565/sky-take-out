@@ -39,9 +39,9 @@ public class DishController {
      */
     @GetMapping("/list")
     @ApiOperation("根据分类id查询菜品")
-    public Result<List<DishVO>> list(Long categoryId) {
+    public Result<List<DishVO>> list(@RequestParam Long categoryId) {
         // 1.构造Redis的key值
-        String key = "dish_" + categoryId;
+        String key = "cache:dish:" + categoryId;
         // 2.查询当前key是否在redis存储，如果存储则return
         List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
         if (!CollectionUtils.isEmpty(list)) return Result.success(list);
@@ -55,6 +55,5 @@ public class DishController {
         redisTemplate.opsForValue().set(key,list,CACHE_DISH_TTL, TimeUnit.MINUTES);
         return Result.success(list);
     }
-
 
 }

@@ -20,9 +20,13 @@ import com.sky.service.IVoucherSeckillService;
 import com.sky.service.IVoucherService;
 import com.sky.utils.CacheClient;
 import com.sky.vo.VoucherVO;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Constants;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,9 +47,12 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
     VoucherMapper voucherMapper;
     @Autowired
     VoucherSeckillMapper voucherSeckillMapper;
-
     @Autowired
     private CacheClient cacheClient;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     @Override
     @Transactional
     public Long saveSeckill(VoucherDTO voucherDTO) {
@@ -65,6 +72,9 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
                  build();
         //voucherSeckillService.save(voucherSeckill);
         Db.save(voucherSeckill);
+        // 将秒杀券的stock信息保存到redis
+        // 使用 StringRedisTemplate，确保库存值以字符串形式存储
+        stringRedisTemplate.opsForValue().set("seckill:stock:" + voucherSeckill.getVoucherId(), voucherSeckill.getStock().toString());
         // 返回ID
         return voucherId;
     }

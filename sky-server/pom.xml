@@ -172,7 +172,12 @@
             <artifactId>jsqlparser</artifactId>
             <version>4.5</version> <!-- 确保是兼容的版本 -->
         </dependency>
-
+        <!--redisson,互斥锁-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.13.6</version>
+        </dependency>
     </dependencies>
 
     <build>
