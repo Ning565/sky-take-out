@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.star.mapper.AiRecommendationLogMapper">
+
+    <!-- 新增推荐记录 -->
+    <insert id="insert" parameterType="com.star.entity.AiRecommendationLog">
+        INSERT INTO ai_recommendation_log
+        (session_id, user_id, user_requirements, recommended_dishes, recommendation_algorithm, recommendation_score, rag_enabled, rag_context, agent_chain, user_feedback, feedback_comment, clicked_dishes, ordered_dishes, total_price, actual_order_price, created_time, updated_time)
+        VALUES
+        (#{sessionId}, #{userId}, #{userRequirements}, #{recommendedDishes}, #{recommendationAlgorithm}, #{recommendationScore}, #{ragEnabled}, #{ragContext}, #{agentChain}, #{userFeedback}, #{feedbackComment}, #{clickedDishes}, #{orderedDishes}, #{totalPrice}, #{actualOrderPrice}, NOW(), NOW())
+    </insert>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultType="com.star.entity.AiRecommendationLog">
+        SELECT * FROM ai_recommendation_log WHERE id = #{id}
+    </select>
+
+    <!-- 根据sessionId查询推荐记录 -->
+    <select id="selectBySessionId" resultType="com.star.entity.AiRecommendationLog">
+        SELECT * FROM ai_recommendation_log WHERE session_id = #{sessionId} ORDER BY created_time DESC
+    </select>
+
+    <!-- 查询用户所有推荐记录 -->
+    <select id="selectByUserId" resultType="com.star.entity.AiRecommendationLog">
+        SELECT * FROM ai_recommendation_log WHERE user_id = #{userId} ORDER BY created_time DESC
+    </select>
+
+    <!-- 更新推荐记录 -->
+    <update id="update" parameterType="com.star.entity.AiRecommendationLog">
+        UPDATE ai_recommendation_log
+        SET user_requirements = #{userRequirements},
+            recommended_dishes = #{recommendedDishes},
+            recommendation_algorithm = #{recommendationAlgorithm},
+            recommendation_score = #{recommendationScore},
+            rag_enabled = #{ragEnabled},
+            rag_context = #{ragContext},
+            agent_chain = #{agentChain},
+            user_feedback = #{userFeedback},
+            feedback_comment = #{feedbackComment},
+            clicked_dishes = #{clickedDishes},
+            ordered_dishes = #{orderedDishes},
+            total_price = #{totalPrice},
+            actual_order_price = #{actualOrderPrice},
+            updated_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除推荐记录 -->
+    <delete id="deleteById">
+        DELETE FROM ai_recommendation_log WHERE id = #{id}
+    </delete>
+
+</mapper> 
