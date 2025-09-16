@@ -235,17 +235,7 @@ star-food-chain/
 - **降低人工成本**：AI助手减少客服人力投入
 - **技术能力展示**：完整的AI应用开发案例
 
-## 联系方式
-如有问题或建议，请联系项目维护者：
-- 邮箱：your_email@example.com
-- 微信：your_wechat_id
-- GitHub：https://github.com/your_username/star-food-chain
-
-## 📜 许可证
-本项目采用 [MIT License](LICENSE) 开源协议
-
 ---
-
 > **⭐ 项目特色**：这是一个展示AI技术在餐饮行业应用的完整案例，涵盖大模型应用开发、多智能体协作、RAG知识检索、推荐算法等核心技术，代码简洁易懂，适合AI开发工程师学习和面试展示。
 
 > **🚀 技术重点**：多Agent分工明确、Spring AI集成简洁、推荐算法实用、对话管理完善，是学习AI应用开发的优秀案例！ 
