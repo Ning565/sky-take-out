@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.mapper.EmployeeMapper">
+
+    <update id="update" parameterType="com.star.entity.Employee">
+        update star_food_chain.employee
+        <set>
+        <if test="username != '' and username != null"> username = #{username}, </if>
+        <if test="name != '' and name != null"> name = #{name}, </if>
+        <if test="password != '' and password != null"> password = #{password} ,</if>
+        <if test="phone != '' and phone != null"> phone = #{phone} ,</if>
+        <if test="sex != '' and sex != null"> sex = #{sex} ,</if>
+        <if test="idNumber != null and idNumber != ''"> id_number = #{idNumber}, </if>
+        <if test="status != null"> status = #{status} ,</if>
+        <if test="updateTime != null">update_Time = #{updateTime},</if>
+         <if test="updateUser != null">update_User = #{updateUser} </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="pageQuery" resultType="com.star.entity.Employee">
+        select * from star_food_chain.employee
+        <where>
+            <if test="name != '' and name != null">
+                TRIM(name) like concat ('%',#{name},'%')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+</mapper>

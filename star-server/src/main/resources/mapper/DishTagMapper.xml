@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.star.mapper.DishTagMapper">
+
+    <!-- 新增标签 -->
+    <insert id="insert" parameterType="com.star.entity.DishTag">
+        INSERT INTO dish_tags
+        (dish_id, tag_name, tag_type, tag_value, weight, confidence, source, created_time, updated_time)
+        VALUES
+        (#{dishId}, #{tagName}, #{tagType}, #{tagValue}, #{weight}, #{confidence}, #{source}, NOW(), NOW())
+    </insert>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultType="com.star.entity.DishTag">
+        SELECT * FROM dish_tags WHERE id = #{id}
+    </select>
+
+    <!-- 根据dishId查询所有标签 -->
+    <select id="selectByDishId" resultType="com.star.entity.DishTag">
+        SELECT * FROM dish_tags WHERE dish_id = #{dishId} ORDER BY weight DESC
+    </select>
+
+    <!-- 根据标签类型和菜品ID查询 -->
+    <select id="selectByDishIdAndType" resultType="com.star.entity.DishTag">
+        SELECT * FROM dish_tags WHERE dish_id = #{dishId} AND tag_type = #{tagType} ORDER BY weight DESC
+    </select>
+
+    <!-- 更新标签 -->
+    <update id="update" parameterType="com.star.entity.DishTag">
+        UPDATE dish_tags
+        SET tag_name = #{tagName},
+            tag_type = #{tagType},
+            tag_value = #{tagValue},
+            weight = #{weight},
+            confidence = #{confidence},
+            source = #{source},
+            updated_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除标签 -->
+    <delete id="deleteById">
+        DELETE FROM dish_tags WHERE id = #{id}
+    </delete>
+
+</mapper> 

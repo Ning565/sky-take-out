@@ -1,0 +1,70 @@
+star:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: star_food_chain
+    username: root
+    password: 123456
+  aliyun:
+    oss:
+      endpoint: https://oss-cn-beijing.aliyuncs.com
+      bucketName: ning-restaurant
+  redis:
+    host: localhost
+    port: 6379
+    database: 0 # 默认使用0号数据库
+    # 没有密码，不配置 password
+  
+  # AI服务开发环境配置
+  ai-dev:
+    # 向量存储使用Redis 1号数据库
+    vector-database: 1
+  wechat1:
+    appid: wx58502940b2c06581
+    secret: a239d112e0270f41562c6004a262d2d1
+  mybatis-plus:
+    mapper-locations: classpath:/mapper/*.xml # 如果使用 XML 映射文件
+    configuration:
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启 SQL 日志
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: manual
+
+# 开发环境大模型API密钥（从环境变量获取，不提交到代码库）
+# 需要在开发环境设置以下环境变量：
+# export DASHSCOPE_API_KEY="your_dashscope_api_key"  
+# export DEEPSEEK_API_KEY="your_deepseek_api_key"
+# export OPENAI_API_KEY="your_openai_api_key"
+
+# 开发环境AI服务配置覆盖
+llm:
+  dashscope:
+    chat:
+      model: qwen-turbo  # 开发环境使用较快的模型
+  deepseek:
+    chat:
+      model: deepseek-chat
+  rag:
+    vector-store:
+      similarity-threshold: 0.6  # 开发环境降低阈值，便于测试
+    embedding:
+      batch-size: 5  # 开发环境减少批处理大小
+  agents:
+    understanding:
+      timeout: 15s  # 开发环境增加超时时间，便于调试
+    recommendation:
+      timeout: 20s
+    response:
+      timeout: 15s
+
+ai:
+  conversation:
+    session-timeout: 3600  # 开发环境延长会话时间，便于测试
+  monitoring:
+    log-model-calls: true  # 开发环境启用详细日志

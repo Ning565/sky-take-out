@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.star.mapper.AiConversationMapper">
+
+    <!-- 新增对话记录 -->
+    <insert id="insert" parameterType="com.star.entity.AiConversation">
+        INSERT INTO ai_conversation
+        (session_id, user_id, user_message, ai_response, conversation_context, conversation_state, model_info, response_time, token_usage, created_time, updated_time)
+        VALUES
+        (#{sessionId}, #{userId}, #{userMessage}, #{aiResponse}, #{conversationContext}, #{conversationState}, #{modelInfo}, #{responseTime}, #{tokenUsage}, NOW(), NOW())
+    </insert>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultType="com.star.entity.AiConversation">
+        SELECT * FROM ai_conversation WHERE id = #{id}
+    </select>
+
+    <!-- 根据sessionId查询全部对话 -->
+    <select id="selectBySessionId" resultType="com.star.entity.AiConversation">
+        SELECT * FROM ai_conversation WHERE session_id = #{sessionId} ORDER BY created_time ASC
+    </select>
+
+    <!-- 查询用户所有对话 -->
+    <select id="selectByUserId" resultType="com.star.entity.AiConversation">
+        SELECT * FROM ai_conversation WHERE user_id = #{userId} ORDER BY created_time DESC
+    </select>
+
+    <!-- 更新AI回复、上下文等 -->
+    <update id="update" parameterType="com.star.entity.AiConversation">
+        UPDATE ai_conversation
+        SET ai_response = #{aiResponse},
+            conversation_context = #{conversationContext},
+            conversation_state = #{conversationState},
+            model_info = #{modelInfo},
+            response_time = #{responseTime},
+            token_usage = #{tokenUsage},
+            updated_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除对话记录 -->
+    <delete id="deleteById">
+        DELETE FROM ai_conversation WHERE id = #{id}
+    </delete>
+
+</mapper> 

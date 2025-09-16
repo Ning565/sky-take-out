@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.mapper.SetmealMapper">
+    <update id="update">
+        update star_food_chain.setmeal
+        <set>
+            <if test="categoryId != null"> category_id = #{categoryId} ,</if>
+            <if test="description != null"> description = #{description},</if>
+            <if test="image != null"> image = #{image},</if>
+            <if test=" name != null"> name = #{name},</if>
+            <if test=" price != null">price = #{price},</if>
+            <if test=" status != null"> status = #{status} ,</if>
+        </set>
+        where id = #{id};
+    </update>
+
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from star_food_chain.setmeal
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByIds">
+        delete from star_food_chain.setmeal where id in
+        <foreach collection="setmealIds" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="pageQuery" resultType="com.star.vo.SetmealVO">
+        select s.*,c.name as categoryName from star_food_chain.setmeal as s left join star_food_chain.category as c on s.category_id = c.id
+        <where>
+        <if test="name != null"> s.name = #{name} </if>
+        <if test="categoryId != null"> s.categoryId = #{categoryId} </if>
+        <if test="status != null"> s.status = #{status} </if>
+        </where>
+    </select>
+
+        <select id="list" parameterType="com.star.entity.Setmeal" resultType="com.star.entity.Setmeal">
+            select * from star_food_chain.setmeal
+            <where>
+                <if test="name != null">
+                    and name like concat('%',#{name},'%')
+                </if>
+                <if test="categoryId != null">
+                    and category_id = #{categoryId}
+                </if>
+                <if test="status != null">
+                    and status = #{status}
+                </if>
+            </where>
+        </select>
+
+</mapper>

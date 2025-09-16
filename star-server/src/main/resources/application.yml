@@ -1,0 +1,165 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+    # allow-bean-definition-overriding: true
+  datasource:
+    druid:
+      driver-class-name: ${star.datasource.driver-class-name}
+      url: jdbc:mysql://${star.datasource.host}:${star.datasource.port}/${star.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${star.datasource.username}
+      password: ${star.datasource.password}
+  redis:
+    host: ${star.redis.host}
+    port: ${star.redis.port}
+    database: ${star.redis.database} # 默认使用0号数据库
+    # 没有密码，不配置 password
+  
+  # Spring AI 大模型配置
+  ai:
+    # OpenAI配置（备用）
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com}
+      chat:
+        options:
+          model: gpt-3.5-turbo
+          temperature: 0.7
+          max-tokens: 1000
+          top-p: 1.0
+      embedding:
+        options:
+          model: text-embedding-ada-002
+    
+    # 向量存储配置
+    vectorstore:
+      redis:
+        uri: redis://${star.redis.host}:${star.redis.port}
+        index: "star-food-ai-vector"
+        prefix: "doc:"
+  mybatis-plus:
+    mapper-locations: ${star.mybatis-plus.mapper-locations} # 如果使用 XML 映射文件
+    configuration:
+      log-impl: ${star.mybatis-plus.configuration.log-impl} # 开启 SQL 日志
+  rabbitmq:
+    host: ${star.rabbitmq.host}
+    port: ${star.rabbitmq.port}
+    username: ${star.rabbitmq.username}
+    password: ${star.rabbitmq.password}
+    listener:
+      simple:
+        acknowledge-mode: ${star.rabbitmq.listener.simple.acknowledge-mode}
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.star.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com:
+      star:
+        mapper: debug
+        service: info
+        controller: info
+
+star:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: ning
+    # 设置jwt过期时间
+    admin-ttl: 72000000000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: token
+    # 配置用户端jwt信息
+    user-secret-key: ningnings
+    user-ttl: 72000000000
+    user-token-name: authentication
+  wechat:
+    appid: ${star.wechat1.appid}
+    secret: ${star.wechat1.secret}
+  aliyun:
+    oss:
+      endpoint: ${star.aliyun.oss.endpoint}
+      bucketName: ${star.aliyun.oss.bucketName}
+
+# 大模型应用专用配置
+llm:
+  # 通义千问配置
+  dashscope:
+    api-key: ${DASHSCOPE_API_KEY:}
+    base-url: https://dashscope.aliyuncs.com/api/v1
+    chat:
+      model: qwen-turbo
+      temperature: 0.7
+      max-tokens: 1000
+    embedding:
+      model: text-embedding-v1
+  
+  # DeepSeek配置  
+  deepseek:
+    api-key: ${DEEPSEEK_API_KEY:}
+    base-url: https://api.deepseek.com/v1
+    chat:
+      model: deepseek-chat
+      temperature: 0.7
+      max-tokens: 1000
+  
+  # MCP协议配置
+  mcp:
+    server:
+      port: 8081
+      max-connections: 100
+    client:
+      timeout: 30s
+      retry-count: 3
+      load-balance-strategy: round-robin
+  
+  # RAG配置
+  rag:
+    vector-store:
+      type: redis
+      similarity-threshold: 0.7
+      max-results: 10
+    embedding:
+      batch-size: 10
+      cache-ttl: 3600
+    knowledge-base:
+      rebuild-interval: 24h
+  
+  # Agent协作配置
+  agents:
+    understanding:
+      model-preference: qwen-turbo
+      timeout: 10s
+      prompt-template: "understanding-agent-prompt"
+    recommendation:
+      model-preference: deepseek-chat
+      timeout: 15s
+      prompt-template: "recommendation-agent-prompt"
+    response:
+      model-preference: qwen-turbo
+      timeout: 8s
+      prompt-template: "response-agent-prompt"
+
+# AI对话系统配置
+ai:
+  conversation:
+    session-timeout: 1800  # 30分钟
+    max-history-size: 20
+    context-cleanup-interval: 3600  # 1小时清理一次过期上下文
+  recommendation:
+    max-dishes-count: 10
+    default-match-threshold: 0.6
+    cache-recommendations: true
+    cache-ttl: 300  # 5分钟缓存
+  monitoring:
+    enable-metrics: true
+    log-model-calls: true
+    performance-threshold: 5000  # 5秒响应时间告警

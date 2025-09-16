@@ -8,14 +8,14 @@
         <groupId>org.springframework.boot</groupId>
         <version>2.7.3</version>
     </parent>
-    <groupId>com.sky</groupId>
-    <artifactId>sky-take-out</artifactId>
+    <groupId>com.star</groupId>
+    <artifactId>star-food-chain</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>sky-common</module>
-        <module>sky-pojo</module>
-        <module>sky-server</module>
+        <module>star-common</module>
+        <module>star-pojo</module>
+        <module>star-server</module>
     </modules>
     <properties>
         <mybatis.spring>2.2.2</mybatis.spring>
@@ -30,6 +30,11 @@
         <jjwt>0.9.1</jjwt>
         <jaxb-api>2.3.1</jaxb-api>
         <poi>3.16</poi>
+        <!-- AI大模型应用相关版本 -->
+        <spring-ai.version>1.0.0</spring-ai.version>
+        <langchain4j.version>0.25.0</langchain4j.version>
+        <dashscope.version>2.8.25</dashscope.version>
+        <jackson.version>2.15.2</jackson.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -122,6 +127,69 @@
                 <artifactId>wechatpay-apache-httpclient</artifactId>
                 <version>0.4.8</version>
             </dependency>
+
+            <!-- AI大模型应用依赖管理 -->
+            <!-- Spring AI 核心依赖 -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-core</artifactId>
+                <version>${spring-ai.version}</version>
+            </dependency>
+            
+            <!-- Spring AI OpenAI支持 -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+                <version>${spring-ai.version}</version>
+            </dependency>
+            
+            <!-- Spring AI Redis向量存储 -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-redis-store</artifactId>
+                <version>${spring-ai.version}</version>
+            </dependency>
+
+            <!-- 阿里云通义千问SDK -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dashscope-sdk-java</artifactId>
+                <version>${dashscope.version}</version>
+            </dependency>
+
+            <!-- DeepSeek SDK （如果有官方SDK则使用，否则通过HTTP调用） -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+            </dependency>
+
+            <!-- LangChain4j（可选，用于更复杂的AI工作流） -->
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j-spring-boot-starter</artifactId>
+                <version>${langchain4j.version}</version>
+            </dependency>
+
+            <!-- Jackson增强JSON处理 -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <!-- HTTP客户端增强（用于自定义API调用） -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>4.11.0</version>
+            </dependency>
+            
         </dependencies>
     </dependencyManagement>
 </project>
